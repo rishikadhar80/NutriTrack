@@ -41,12 +41,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
-    const { data } = await registerUser(userData);
-    localStorage.setItem('nutritrack_token', data.token);
-    setToken(data.token);
-    setUser(data.user);
-    toast.success('Account created successfully!');
-    return data;
+    try {
+      const { data } = await registerUser(userData);
+      localStorage.setItem('nutritrack_token', data.token);
+      setToken(data.token);
+      setUser(data.user);
+      toast.success('Account created successfully!');
+      return data;
+    } catch (error) {
+      console.error('Register error details:', error.response?.data || error.message);
+      throw error;
+    }
   };
 
   const logout = () => {
